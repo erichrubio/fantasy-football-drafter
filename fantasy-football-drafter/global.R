@@ -14,14 +14,21 @@ g.vec.positions <- c('QB', 'RB', 'WR', 'TE', 'K', 'DST')
 
 g.initial.players.to.drop = c()
 
-g.dt.pros <- fread(paste0(getwd(), "/projections_2022_season.csv"))
+csv_dir = (
+  '/Users/erichrubio/Documents/fantasy-football/fantasy-football-drafter/'
+)
+
+csv_name = 'jellys-2023.csv'
+# csv_name = 'bad_hombres_projections_2023_wk0.csv'
+
+g.dt.pros <- fread(paste0(csv_dir, csv_name))
 g.dt.pros[, id := .I]
 g.dt.pros[, `:=` (
-  tier = NULL,
-  ecr = NULL,
-  sd_ecr = NULL,
-  salary = NULL,
-  ppd = NULL
+  tier = NULL
+  # ecr = NULL,
+  # sd_ecr = NULL,
+  # salary = NULL,
+  # ppd = NULL
 )]
 g.dt.pros
 
@@ -29,13 +36,20 @@ g.r.dt.pros <- copy(g.dt.pros)
 
 # Formats columns.
 g.r.dt.pros <- g.r.dt.pros[, .(
-  Rank = rank, Player = player, Pos = position, Team = team,
+  Rank = rank,
+  Player = player,
+  Pos = position,
+  Team = team,
   Points = round(points),
   VoR = round(points_vor),
-  SD_Pts = round(sd_pts), Floor = round(floor), Ceiling = round(ceiling),
+  SD_Pts = round(sd_pts),
+  Floor = round(floor),
+  Ceiling = round(ceiling),
   Pos_Rank = position_rank,
-  F_VoR = floor_vor, C_VoR = ceiling_vor,
-  ADP = adp, Uncertainty = uncertainty,
+  F_VoR = round(floor_vor),
+  C_VoR = round(ceiling_vor),
+  ADP = round(adp, 1),
+  Uncertainty = uncertainty,
   id
 )]
 
