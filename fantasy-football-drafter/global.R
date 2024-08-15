@@ -12,14 +12,14 @@ shinyInput <- function(FUN, len, id, ...) {
 
 g.vec.positions <- c('QB', 'RB', 'WR', 'TE', 'K', 'DST')
 
-g.initial.players.to.drop = c()
+g.initial.players.to.drop <- c()
 
-csv_dir = (
+csv_dir <- (
   '/Users/erichrubio/Documents/fantasy-football/fantasy-football-drafter/'
 )
 
-# csv_name = 'jellys-2023.csv'
-csv_name = 'hombres-2023.csv'
+# csv_name <- 'hombres-2023.csv'
+csv_name <- '2024_jelly_projections_2024_wk0_updated.csv'
 
 g.dt.pros <- fread(paste0(csv_dir, csv_name))
 g.dt.pros[, id := .I]
@@ -41,11 +41,13 @@ g.r.dt.pros <- g.r.dt.pros[, .(
   Pos = position,
   Team = team,
   Points = round(points),
-  VoR = round(points_vor),
+  # VoR = round(points_vor),
+  VoR = round(vorp),
   SD_Pts = round(sd_pts),
   Floor = round(floor),
   Ceiling = round(ceiling),
   Pos_Rank = position_rank,
+  Flex_VoR = round(flex_vorp),
   F_VoR = round(floor_vor),
   C_VoR = round(ceiling_vor),
   ADP = round(adp, 1),
