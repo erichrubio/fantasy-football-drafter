@@ -12,7 +12,7 @@ projections <- read.csv(csv_path)
 team_size <- 12
 
 # Defines the number of starters per position in the league
-starters <- c(QB = 1, RB = 2, WR = 2, TE = 1) * team_size
+starters <- c(QB = 1, RB = 2, WR = 2, TE = 1, K = 1, DST = 1) * team_size
 
 # Calculates the replacement level points for each position
 replacement_points <- projections %>%
@@ -53,7 +53,7 @@ projections <- projections %>%
   mutate(flex_vorp = ifelse(
     position %in% c("RB", "WR", "TE"),
     points - flex_replacement_points,
-    NA
+    -9999
   ))
 
 # Prints the top players by VORP
