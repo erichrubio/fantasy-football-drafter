@@ -5,6 +5,22 @@ function(input, output, session) {
 
   # Reactive player projections.
   r.dt.pros <- reactiveValues(data = g.r.dt.pros)
+  
+  output$drafted_qbs <- renderText({
+    position_counts <- g.r.dt.pros[
+      Player %in% input$input_drop_players,
+      .N,
+      by=Pos
+    ]
+    paste(position_counts$Pos, position_counts$N, sep = ':', collapse = ' ')  
+  })
+  
+  output$expected_draft_position <- renderText({
+    picks <- length(input$input_drop_players)
+    rnd <- floor(picks / 12)
+    pick <- picks %% 12 + 1
+    paste0('Round: ', rnd, ';  Pick: ', pick)
+  })
 
   # Player projections data table output.
   output$dto_players <- DT::renderDataTable(

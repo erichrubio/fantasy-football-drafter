@@ -9,7 +9,11 @@ fluidPage(
         choices = g.vec.positions,
         selected = g.vec.positions,
         multiple = TRUE
-        )
+      ),
+      h4("Drafted Players"),
+      textOutput(outputId='drafted_qbs'),
+      h4("Expected Draft Position"),
+      textOutput(outputId='expected_draft_position')
     ),
     column(
       10,
