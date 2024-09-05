@@ -4,15 +4,16 @@ library(stringr)
 csv_dir <- (
   '/Users/erichrubio/Documents/fantasy-football/fantasy-football-drafter/'
 )
+# csv_name <- '2024_bad_hombres_projections_2024_wk0.csv'
 csv_name <- '2024_jelly_projections_2024_wk0.csv'
 csv_path <- paste0(csv_dir, csv_name)
 
 projections <- read.csv(csv_path)
 
-team_size <- 12
+num_of_teams <- 12
 
 # Defines the number of starters per position in the league
-starters <- c(QB = 1, RB = 2, WR = 2, TE = 1, K = 1, DST = 1) * team_size
+starters <- c(QB = 1, RB = 2, WR = 2, TE = 1, K = 1, DST = 1) * num_of_teams
 
 # Calculates the replacement level points for each position
 replacement_points <- projections %>%
@@ -39,7 +40,7 @@ print(top_players %>%
         select(player, position, points, vorp, rank, position_rank) %>%
         head(20))
 
-flex_starters <- starters[['RB']] + starters[['WR']] + team_size
+flex_starters <- starters[['RB']] + starters[['WR']] + num_of_teams
 
 flex_replacement_points <- projections %>%
   filter(position %in% c("RB", "WR", "TE")) %>%

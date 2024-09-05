@@ -14,12 +14,14 @@ g.vec.positions <- c('QB', 'RB', 'WR', 'TE', 'K', 'DST')
 
 g.initial.players.to.drop <- c()
 
+g.n_teams <- 12
+
 csv_dir <- (
   '/Users/erichrubio/Documents/fantasy-football/fantasy-football-drafter/'
 )
 
-# csv_name <- 'hombres-2023.csv'
 csv_name <- '2024_jelly_projections_2024_wk0_updated.csv'
+# csv_name <- '2024_bad_hombres_projections_2024_wk0_updated.csv'
 
 g.dt.pros <- fread(paste0(csv_dir, csv_name))
 g.dt.pros[, id := .I]

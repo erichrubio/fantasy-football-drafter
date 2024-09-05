@@ -17,8 +17,8 @@ function(input, output, session) {
   
   output$expected_draft_position <- renderText({
     picks <- length(input$input_drop_players)
-    rnd <- floor(picks / 12)
-    pick <- picks %% 12 + 1
+    rnd <- floor(picks / g.n_teams)
+    pick <- picks %% g.n_teams + 1
     paste0('Round: ', rnd, ';  Pick: ', pick)
   })
 
