@@ -5,7 +5,7 @@ csv_dir <- (
   '/Users/erichrubio/Documents/fantasy-football/fantasy-football-drafter/'
 )
 # csv_name <- '2024_bad_hombres_projections_2024_wk0.csv'
-csv_name <- '2024_jelly_projections_2024_wk0.csv'
+csv_name <- '2025_jelly_projections.csv'
 csv_path <- paste0(csv_dir, csv_name)
 
 projections <- read.csv(csv_path)

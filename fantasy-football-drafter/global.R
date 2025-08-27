@@ -20,7 +20,7 @@ csv_dir <- (
   '/Users/erichrubio/Documents/fantasy-football/fantasy-football-drafter/'
 )
 
-csv_name <- '2024_jelly_projections_2024_wk0_updated.csv'
+csv_name <- '2025_jelly_projections_updated.csv'
 # csv_name <- '2024_bad_hombres_projections_2024_wk0_updated.csv'
 
 g.dt.pros <- fread(paste0(csv_dir, csv_name))
