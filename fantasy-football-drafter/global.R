@@ -1,6 +1,7 @@
 library(shiny)
 library(data.table)
 library(DT)
+source('calculate_vor.R')
 
 shinyInput <- function(FUN, len, id, ...) {
   inputs <- character(len)
@@ -10,18 +11,22 @@ shinyInput <- function(FUN, len, id, ...) {
   inputs
 }
 
-g.vec.positions <- c('QB', 'RB', 'WR', 'TE', 'K', 'DST')
-
-g.initial.players.to.drop <- c()
-
-g.n_teams <- 12
-
 csv_dir <- (
   '/Users/erichrubio/Documents/fantasy-football/fantasy-football-drafter/'
 )
 
-csv_name <- '2025_jelly_projections_updated.csv'
-# csv_name <- '2024_bad_hombres_projections_2024_wk0_updated.csv'
+g.vec.positions <- c('QB', 'RB', 'WR', 'TE', 'K', 'DST')
+
+g.initial.players.to.drop <- c()
+
+# g.n_teams <- 12
+g.n_teams <- 10
+
+# csv_name <- '2025_jelly_projections_updated.csv'
+csv_name <- '2025_bad_hombres_projections_updated.csv'
+
+# g.starters_per_team <- c(QB = 1, RB = 2, WR = 2, TE = 1, K = 1, DST = 1)
+g.starters_per_team <- c(QB = 2, RB = 2, WR = 2, TE = 1, K = 1, DST = 1)
 
 g.dt.pros <- fread(paste0(csv_dir, csv_name))
 g.dt.pros[, id := .I]
