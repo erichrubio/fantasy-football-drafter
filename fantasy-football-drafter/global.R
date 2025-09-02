@@ -51,14 +51,14 @@ g.r.dt.pros <- g.r.dt.pros[, .(
   # VoR = round(points_vor),
   VoR = round(vorp),
   SD_Pts = round(sd_pts),
+  Uncertainty = uncertainty,
   Floor = round(floor),
   Ceiling = round(ceiling),
-  Pos_Rank = position_rank,
-  Flex_VoR = round(flex_vorp),
   F_VoR = round(floor_vor),
   C_VoR = round(ceiling_vor),
   ADP = round(adp, 1),
-  Uncertainty = uncertainty,
+  Flex_VoR = round(flex_vorp),
+  Pos_Rank = position_rank,
   id
 )]
 
