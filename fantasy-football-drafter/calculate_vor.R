@@ -5,16 +5,16 @@ library(stringr)
 
 # Computes replacement points per position using the same approach as the original
 # calculate_vor script, but parameterized by a named vector of starters per position.
-# - projections: data.frame with columns `position` and `points`
+# - projections: data.frame with columns `position` and metric column (e.g., `points`)
 # - starters: named integer vector with counts per position (e.g., c(QB=1, RB=2, ...))
 #   If a position has 0 remaining slots, replacement is set to Inf (so VOR becomes negative).
-compute_replacement_points_by_position <- function(projections, starters) {
-  stopifnot(all(c("position", "points") %in% names(projections)))
+compute_replacement_points_by_position <- function(projections, starters, col = "points") {
+  stopifnot(all(c("position", col) %in% names(projections)))
   pos_levels <- unique(projections$position)
   rp <- setNames(numeric(length(pos_levels)), pos_levels)
   for (p in pos_levels) {
     k <- as.integer(ifelse(is.na(starters[p]), 0L, starters[p]))
-    pts <- sort(projections$points[projections$position == p], decreasing = TRUE)
+    pts <- sort(projections[[col]][projections$position == p], decreasing = TRUE)
     if (k <= 0) {
       rp[p] <- Inf
     } else if (length(pts) >= k) {
@@ -30,10 +30,10 @@ compute_replacement_points_by_position <- function(projections, starters) {
 
 # Computes VORP per row given projections and starters.
 # Returns a numeric vector of the same length as nrow(projections).
-compute_vorp <- function(projections, starters) {
-  rp <- compute_replacement_points_by_position(projections, starters)
+compute_vorp <- function(projections, starters, col = "points") {
+  rp <- compute_replacement_points_by_position(projections, starters, col)
   rp_vec <- rp[projections$position]
-  projections$points - rp_vec
+  projections[[col]] - rp_vec
 }
 
 # Optional: End-to-end pipeline similar to the original script for CSV -> updated CSV
@@ -45,16 +45,16 @@ run_vor_pipeline <- function(csv_dir,
   projections <- read.csv(csv_path)
   starters <- per_team_starters * num_of_teams
 
-  # Position VORP
-  replacement_points <- projections %>%
-    group_by(position) %>%
-    arrange(desc(points), .by_group = TRUE) %>%
-    slice(starters[position]) %>%
-    summarize(replacement_points = min(points), .groups = 'drop')
+  # Replacement points per position (based on points only)
+  rp_points <- compute_replacement_points_by_position(projections, starters, "points")
 
   projections <- projections %>%
-    left_join(replacement_points, by = "position") %>%
-    mutate(vorp = points - replacement_points) %>%
+    mutate(
+      replacement_points = rp_points[position],
+      vorp = points - replacement_points,
+      f_vor = if ("floor" %in% names(.)) ifelse(is.na(floor), points, floor) - replacement_points else NA_real_,
+      c_vor = if ("ceiling" %in% names(.)) ifelse(is.na(ceiling), points, ceiling) - replacement_points else NA_real_
+    ) %>%
     mutate(rank = min_rank(-vorp)) %>%
     group_by(position) %>%
     mutate(position_rank = min_rank(-vorp)) %>%
@@ -82,10 +82,10 @@ run_vor_pipeline <- function(csv_dir,
   invisible(top_players)
 }
 
-
 run_vor_pipeline(
   csv_dir='/Users/erichrubio/Documents/fantasy-football/fantasy-football-drafter/',
   csv_name='2025_bad_hombres_projections.csv',
   num_of_teams=10,
   per_team_starters = c(QB = 2, RB = 2, WR = 2, TE = 1, K = 1, DST = 1)
 )
+
